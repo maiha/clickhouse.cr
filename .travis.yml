@@ -1,0 +1,7 @@
+addons:
+  apt:
+    packages:
+      - docker-ce
+
+script:
+  make test

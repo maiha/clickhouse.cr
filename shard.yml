@@ -1,0 +1,17 @@
+name: clickhouse
+version: 0.1.0
+
+dependencies:
+  var:
+    github: maiha/var.cr
+    version: ">= 1.2.0"
+  jq:
+    github: maiha/jq.cr
+    version: ">= 0.7.0"
+
+authors:
+  - maiha <maiha@wota.jp>
+
+crystal: 0.27.0
+
+license: MIT

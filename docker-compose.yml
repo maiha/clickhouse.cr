@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+  spec:
+    image: crystallang/crystal:0.27.0
+    command: bash -c "shards update; crystal spec -v"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - .:/v
+    links:
+      - clickhouse
+    working_dir: /v
+    environment:
+      CLICKHOUSE_HOST: clickhouse
+      CLICKHOUSE_PORT: 8123
+
+  clickhouse:
+    image: yandex/clickhouse-server
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
