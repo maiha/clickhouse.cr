@@ -9,11 +9,21 @@ class Clickhouse::Response::JSONCompactParser
       v = type.sub(/\(\d+\)/, "")
       DataType.parse?(v) || raise TypeNotSupported.new("column(#{name}) has unsupported type: '#{type}'")
     end
-  end  
-  
+  end
+
+  class Statistics
+    Jq.mapping({
+      elapsed: Float64,  # 0.000671276
+      rows_read: Int64,  # 1
+      bytes_read: Int64, # 1
+    })
+  end      
+    
   Jq.mapping({
     meta: Array(Field),
     data: Array(Array(JSON::Any)),
+    rows: Int64,
+    statistics: Statistics,
   })
 
   def self.parse(body : String)

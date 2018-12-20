@@ -12,11 +12,11 @@ require "clickhouse"
 client = Clickhouse.new(host: "localhost", port: 8123)
 
 res = client.execute("SELECT 1, 'foo'")
-res.size # => 1
-res.to_a # => [[1, "foo"]]
-res.each do |vals|
-  vals   # => [1, "foo"]
-end
+res.to_a                  # => [[1, "foo"]]
+res.rows                  # => 1
+res.statistics.elapsed    # => 0.000671276
+res.statistics.rows_read  # => 1
+res.statistics.bytes_read # => 1
 ```
 
 ## Available DataType
@@ -46,14 +46,14 @@ make test
 2. [src/clickhouse.cr](./src/clickhouse.cr) Add corresponding Crystal class into `Clickhouse::Type`
 3. [src/clickhouse/cast.cr](./src/clickhouse/cast.cr) Add logic to combine them
 
-## TODO
+## Roadmap
 
 - Core
-  - [ ] Support all primitive DataType
+  - [ ] all primitive DataType
 - Request
   - [ ] output format
 - Response
-  - [ ] statistics methods
+  - [x] statistics methods
   - [ ] fetch value by field name
 
 ## Contributing

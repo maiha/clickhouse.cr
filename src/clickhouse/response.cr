@@ -10,12 +10,10 @@ struct Clickhouse::Response
   include Enumerable(Array(Type))
 
   var parsed : JSONCompactParser = JSONCompactParser.parse(body)
-  var meta   : Array(JSONCompactParser::Field) = parsed.meta
   var data   : Array(Array(JSON::Any)) = parsed.data
 
   delegate status_code, body, to: http
-
-  def fields; meta; end
+  delegate meta, data, rows, statistics, to: parsed
 
   def success? : Response?
     http.success? ? self : nil
@@ -28,7 +26,7 @@ struct Clickhouse::Response
   def each
     data.each do |row|
       vals = row.map_with_index{|any, i|
-        field = fields[i]? || raise FieldNotFound.new("no field[#{i}] in #{meta}")
+        field = meta[i]? || raise FieldNotFound.new("no field[#{i}] in #{meta}")
         cast(any, field)
       }
       yield vals
