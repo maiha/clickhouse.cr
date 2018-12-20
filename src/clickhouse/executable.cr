@@ -27,7 +27,7 @@ module Clickhouse::Executable
     http_res   = http_client.exec(http_req)
     stopped_at = Time.now
 
-    Response.new(req: req, http: http_res, time: (stopped_at - started_at))
+    Response.new(uri: uri, req: req, http: http_res, time: (stopped_at - started_at))
 
   rescue ex : Errno
     raise Clickhouse::CannotConnectError.new("#{ex.class}: #{ex.message}").tap(&.uri= uri)

@@ -21,6 +21,7 @@ end
 ### Server Error
 
 class Clickhouse::ServerError < Clickhouse::Error
+  var uri  : URI
   var code : ErrorCode
 
   def self.parse(body : String)
@@ -37,7 +38,6 @@ class Clickhouse::ServerError < Clickhouse::Error
 end
 
 class Clickhouse::ConnectionError < Clickhouse::ServerError
-  var uri : URI
 end
 
 class Clickhouse::CannotConnectError < Clickhouse::ConnectionError

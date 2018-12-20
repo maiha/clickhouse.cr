@@ -1,4 +1,5 @@
 record Clickhouse::Response,
+  uri  : URI,
   req  : Request,
   http : HTTP::Client::Response,
   time : Time::Span
@@ -12,10 +13,18 @@ struct Clickhouse::Response
   var meta   : Array(JSONCompactParser::Field) = parsed.meta
   var data   : Array(Array(JSON::Any)) = parsed.data
 
-  delegate status_code, success?, body, to: http
+  delegate status_code, body, to: http
 
   def fields; meta; end
 
+  def success? : Response?
+    http.success? ? self : nil
+  end
+  
+  def success! : Response
+    success? || raise ServerError.new("#{status_code}").tap(&.uri= uri)
+  end
+  
   def each
     data.each do |row|
       vals = row.map_with_index{|any, i|
