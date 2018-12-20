@@ -18,6 +18,9 @@ end
 class Clickhouse::DataNotFound < Clickhouse::LibraryError
 end
 
+class Clickhouse::CastError < Clickhouse::LibraryError
+end
+
 ######################################################################
 ### Server Error
 

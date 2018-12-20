@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-private def json : String
+private def simple_json : String
   <<-EOF
     {
       "meta": [
@@ -20,7 +20,7 @@ private def json : String
 end
 
 describe Clickhouse::Response::JSONCompactParser do
-  parsed = Clickhouse::Response::JSONCompactParser.parse(json)
+  parsed = Clickhouse::Response::JSONCompactParser.from_json(simple_json)
 
   describe "#meta" do
     it "returns an array of Field" do
@@ -48,6 +48,39 @@ describe Clickhouse::Response::JSONCompactParser do
       parsed.statistics.elapsed.should eq(0.000671276)
       parsed.statistics.rows_read.should eq(1)
       parsed.statistics.bytes_read.should eq(1)
+    end
+  end
+end
+
+# `count(*)` returns a string like `[["1"]]` although it has "UInt64" type.
+private def count_json : String
+  <<-EOF
+    {
+      "meta": [
+        {
+          "name": "count()",
+          "type": "UInt64"
+        }
+      ],
+      "data": [
+        ["1"]
+      ],
+      "rows": 1,
+      "statistics": {
+        "elapsed": 0.0010013,
+        "rows_read": 0,
+        "bytes_read": 0
+      }
+    }
+    EOF
+end
+
+describe Clickhouse::Response::JSONCompactParser do
+  parsed = Clickhouse::Response::JSONCompactParser.from_json(count_json)
+
+  context "the case of COUNT(*)" do
+    it "accepts string as int" do
+      parsed.scalar.should eq(1)
     end
   end
 end

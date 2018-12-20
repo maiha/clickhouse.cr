@@ -44,7 +44,12 @@ describe Clickhouse::Response do
 
   describe "#scalar" do
     it "returns the first value as Type" do
-      res = client.execute("SELECT 1")
+      res = client.execute("SELECT 'foo'")
+      res.scalar.should eq("foo")
+    end
+
+    it "for the case of int" do
+      res = client.execute("SELECT count(*) FROM system.databases WHERE name = 'default'")
       res.scalar.should eq(1)
     end
   end

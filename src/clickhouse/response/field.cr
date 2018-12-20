@@ -8,4 +8,8 @@ struct Clickhouse::Response::Field
     v = type.sub(/\(\d+\)/, "")
     DataType.parse?(v) || raise TypeNotSupported.new("column(#{name}) has unsupported type: '#{type}'")
   end
+
+  def to_s(io : IO)
+    io << "#{name}(#{type})"
+  end
 end
