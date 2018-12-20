@@ -20,7 +20,7 @@ struct Clickhouse::Response
   end
   
   def success! : Response
-    success? || raise ServerError.new("#{status_code}").tap(&.uri= uri)
+    success? || raise ServerError.parse(body).tap(&.uri= uri)
   end
 
   def field(i : Int32)
@@ -56,7 +56,7 @@ struct Clickhouse::Response
     end
   end
 
-  protected def cast(any : JSON::Any, field : JSONCompactParser::Field) : Type
+  protected def cast(any : JSON::Any, field : Field) : Type
     Cast.cast(any, field.data_type)
   end
 end

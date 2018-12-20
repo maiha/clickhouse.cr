@@ -36,7 +36,7 @@ describe Clickhouse::Response do
 
     it "raises ServerError when http is not success" do
       res = sample_response(code: 500)
-      expect_raises(Clickhouse::ServerError, "500") do
+      expect_raises(Clickhouse::ServerError) do
         res.success!
       end
     end
