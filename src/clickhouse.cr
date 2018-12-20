@@ -7,7 +7,7 @@ require "var"
 require "jq"
 
 class Clickhouse
-  alias Type = Bool | String | Time | UInt8
+  alias Type = Bool | Float32 | Float64 | Int16 | Int32 | Int64 | Int8 | String | Time | UInt8 | UInt16 | UInt32 | UInt64
   # See also `Clickhouse::DataType` and `Clickhouse::Cast`
 end
 

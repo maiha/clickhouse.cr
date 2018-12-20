@@ -50,7 +50,7 @@ make test
 ## Roadmap
 
 - Core
-  - [ ] all primitive DataType
+  - [x] all primitive DataType
 - Request
   - [ ] output format
 - Response
