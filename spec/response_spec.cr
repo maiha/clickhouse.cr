@@ -41,4 +41,11 @@ describe Clickhouse::Response do
       end
     end
   end
+
+  describe "#scalar" do
+    it "returns the first value as Type" do
+      res = client.execute("SELECT 1")
+      res.scalar.should eq(1)
+    end
+  end
 end

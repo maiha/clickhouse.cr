@@ -15,7 +15,8 @@ end
 class Clickhouse::FieldNotFound < Clickhouse::LibraryError
 end
 
-
+class Clickhouse::DataNotFound < Clickhouse::LibraryError
+end
 
 ######################################################################
 ### Server Error

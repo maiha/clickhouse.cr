@@ -11,12 +11,13 @@ require "clickhouse"
 
 client = Clickhouse.new(host: "localhost", port: 8123)
 
-res = client.execute("SELECT 1, 'foo'")
-res.to_a                  # => [[1, "foo"]]
+res = client.execute("SELECT 'foo', 2")
+res.to_a                  # => [["foo", 2]]
 res.rows                  # => 1
 res.statistics.elapsed    # => 0.000671276
 res.statistics.rows_read  # => 1
 res.statistics.bytes_read # => 1
+res.scalar                # => "foo"
 ```
 
 ## Available DataType
