@@ -38,7 +38,7 @@ class Clickhouse
     self.connect_timeout = connect_timeout
     self.read_timeout    = read_timeout
 
-    self.uri = URI.parse("http://#{host}:#{port}")
+    self.uri = URI.parse("http://#{self.host}:#{self.port}")
   end
 
   include Executable
