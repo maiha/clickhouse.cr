@@ -31,7 +31,7 @@ res.scalar                # => "foo"
 dependencies:
   var:
     github: maiha/clickhouse.cr
-    version: 0.1.0
+    version: 0.1.1
 ```
 2. Run `shards install`
 
