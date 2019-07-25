@@ -24,6 +24,20 @@ res.scalar                # => "foo"
 
 - ClickHouse : [src/clickhouse/data_type.cr](./src/clickhouse/data_type.cr) 
 
+## QueryTokenizer
+
+This provides general purpose query tokenizer like well-known advanced search.
+
+```crystal
+string = %( foo from:user1 "a:b" -bar -"-x:-y" )
+tokens = Clickhouse::QueryTokenizer.tokenize(string)
+
+puts tokens.map(&.inspect)
+# [Included("foo"), Modified("user1"), Exactly("a:b"), -Included("bar"), -Exactly("-x:-y")]
+puts tokens.map(&.to_s)
+ # ["foo", "from:user1", "\"a:b\"", "-bar", "-\"-x:-y\""]
+```
+
 ## Installation
 
 1. Add the dependency to your `shard.yml`:
