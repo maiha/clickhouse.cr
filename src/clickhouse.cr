@@ -1,4 +1,5 @@
 # stdlib
+require "csv"
 require "http"
 require "logger"
 
@@ -42,4 +43,5 @@ class Clickhouse
   end
 
   include Executable
+  include Schema::Reflection
 end

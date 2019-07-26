@@ -1,11 +1,14 @@
 # ```console
-# git grep 'registerOutputFormat("' | grep -oP '(?<=").+(?=")' | sort
+# git grep 'registerOutputFormat(' | grep -oP '(?<=").+(?=")' | sort | uniq
 # ```
 
 enum Clickhouse::OutputFormat
+  CSV
+  CSVWithNames
   JSON
   JSONCompact
   JSONEachRow
+  MySQLWire
   Native
   Null
   ODBCDriver
@@ -17,6 +20,7 @@ enum Clickhouse::OutputFormat
   PrettySpace
   PrettySpaceNoEscapes
   RowBinary
+  RowBinaryWithNamesAndTypes
   TSKV
   Values
   Vertical

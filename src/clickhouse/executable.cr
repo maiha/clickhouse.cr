@@ -14,6 +14,12 @@ module Clickhouse::Executable
     execute(Request.new(query: sql))
   end
 
+  def execute_as_csv(sql : String) : Array(Array(String))
+    req = Request.new(sql, OutputFormat::CSV)
+    res = execute(req)
+    CSV.parse(res.success!.body)
+  end
+  
   def execute(req : Request) : Response
     http_req = HTTP::Request.new("POST", build_query_param, build_headers, body: req.sql)
     http_client = build_http

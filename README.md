@@ -24,6 +24,31 @@ res.scalar                # => "foo"
 
 - ClickHouse : [src/clickhouse/data_type.cr](./src/clickhouse/data_type.cr) 
 
+## Schema
+
+provides reflecting database objects.
+
+- [Database](./src/clickhouse/database.cr)
+- [Table](./src/clickhouse/table.cr)
+- [Column](./src/clickhouse/column.cr)
+
+```crystal
+client = Clickhouse.new
+client.databases.map(&.name)
+# => ["default", "system", ...
+
+system = client.database("system")
+system.tables.map(&.name)
+# => ["aggregate_function_combinators", "asynchronous_metrics", ...
+
+table = client.table("system", "parts")
+table.columns.map(&.name)
+# => ["partition", "name", ...
+
+table.columns.select(&.type.date_time?).map(&.name)
+# => ["modification_time", "remove_time", "min_time", "max_time"]
+```
+
 ## QueryTokenizer
 
 This provides general purpose query tokenizer like well-known advanced search.
