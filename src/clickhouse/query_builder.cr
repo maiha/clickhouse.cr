@@ -25,12 +25,19 @@ class Clickhouse
       conds << (stmt.gsub("?", "%s") % args)
     end
 
-    def by_name(v : Array(String) | String | Nil)
+    def by_name(v : Array(String) | String | Nil, not = false)
+      return if name_fields.empty?
       names = v.is_a?(Array) ? v : v.to_s.gsub(/　/, " ").split(/\s+/)
-      names = names.map(&.strip) - [""]
       names.each do |name|
-        self.conds << contains("concat(%s)" % name_fields.join(","), name)
+        name = name.strip
+        next if name.empty?
+        contains("concat(%s)" % name_fields.join(","), name, not: not)
       end
+    end
+
+    def contains(field, value, not = false)
+      op = not ? "=" : ">"
+      conds << "positionCaseInsensitiveUTF8(%s, %s) #{op} 0" % [field, quote_str(value)]
     end
   end
 
@@ -55,6 +62,10 @@ class Clickhouse
       build(QueryType::COUNT)
     end
 
+    def where : String
+      conds.map{|c| "(#{c})"}.join("\n  AND ")
+    end
+
     def build(type = nil)
       type ||= self.type()
       field = fields.join(", ")
@@ -63,9 +74,7 @@ class Clickhouse
         s << "SELECT #{field}\n"
         s << "FROM #{table}\n"
         if conds.any?
-          s << "WHERE "
-          s << conds.map{|c| "(#{c})"}.join("\n  AND ")
-          s << "\n"
+          s << "WHERE " << where << "\n"
         end
         if ! type.count?
           if orders.any?
@@ -77,10 +86,6 @@ class Clickhouse
       end
     end
     
-    def contains(field, value)
-      "positionCaseInsensitiveUTF8(%s, %s)" % [field, quote_str(value)]
-    end
-
     def quote_str(v : String)
       char = '\''
       char + v.gsub(char, "#{char}#{char}") + char
