@@ -47,7 +47,7 @@ table = client.table("system", "parts")
 table.columns.map(&.name)
 # => ["partition", "name", ...
 
-table.columns.select(&.type.date_time?).map(&.name)
+table.columns.select(&.type.=~(/DateTime/)).map(&.name)
 # => ["modification_time", "remove_time", "min_time", "max_time"]
 ```
 
