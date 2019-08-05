@@ -7,6 +7,10 @@ describe Clickhouse do
     tbl = "test.maiha_crystal_test"
       
     client.execute(<<-EOF).success!
+      CREATE DATABASE IF NOT EXISTS test
+      EOF
+      
+    client.execute(<<-EOF).success!
       DROP TABLE IF EXISTS #{tbl}
       EOF
       

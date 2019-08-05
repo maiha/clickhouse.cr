@@ -1,6 +1,8 @@
 # clickhouse.cr [![Build Status](https://travis-ci.org/maiha/clickhouse.cr.svg?branch=master)](https://travis-ci.org/maiha/clickhouse.cr)
 
-ClickHouse client for Crystal
+ClickHouse client for [Crystal](http://crystal-lang.org/).
+
+- crystal: 0.30.0
 
 ## Usage
 
@@ -70,7 +72,7 @@ puts tokens.map(&.to_s)
 dependencies:
   var:
     github: maiha/clickhouse.cr
-    version: 0.2.1
+    version: 0.3.0
 ```
 2. Run `shards install`
 
@@ -95,6 +97,9 @@ make test
 - Response
   - [x] statistics methods
   - [ ] fetch value by field name
+
+#### BREAKING CHANGES
+- 0.3.0: `Column#type` is now `String` because `enum` can't handle `Array(Int32)` as its value.
 
 ## Contributing
 
