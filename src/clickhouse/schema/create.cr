@@ -45,7 +45,7 @@ class Clickhouse::Schema::Create
     buf.split(/,/).each do |line|
       case line
       when /\A\s*(#{IDENTIFIER})\s+(#{IDENTIFIER})\s*\Z/m
-        array << Column.new($1, DataType.parse($2))
+        array << Column.new($1, $2.strip)
       else
         raise "can't parse schema column: #{line}"
       end

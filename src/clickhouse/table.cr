@@ -12,7 +12,7 @@ class Clickhouse::Table
     req = Request.new(sql, OutputFormat::JSONCompact)
     res = ctx.execute(req)
     meta = Response::JSONCompactParser.parse(res.success!.body).meta
-    meta.map{|field| Column.new(field.name, DataType.parse(field.type))}
+    meta.map{|field| Column.new(field.name, field.type)}
     #    return names.map
   end
 

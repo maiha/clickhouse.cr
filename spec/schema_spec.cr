@@ -14,7 +14,7 @@ describe Clickhouse do
       CREATE TABLE #{tbl}
       (
         date Date,
-        value UInt32
+        value Array(UInt32)
       )
       ENGINE = MergeTree(date, date, 8192)
       EOF
@@ -41,7 +41,7 @@ describe Clickhouse do
       table = client.table("test", "maiha_crystal_test")
       columns = table.columns
       columns.map(&.name).should eq(["date", "value"])
-      columns.map(&.type).should eq([Clickhouse::DataType::Date, Clickhouse::DataType::UInt32])
+      columns.map(&.type).should eq(["Date", "Array(UInt32)"])
     end
   end
 end
