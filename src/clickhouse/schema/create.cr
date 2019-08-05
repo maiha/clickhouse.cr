@@ -1,6 +1,6 @@
 class Clickhouse::Schema::Create
   var create  : String = "CREATE TABLE"
-  var db      : String
+  var db      : String = "default"
   var table   : String
   var column  : String
   var columns : Array(Column) = self.class.parse_columns(column)
