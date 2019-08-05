@@ -3,7 +3,7 @@ class Clickhouse::Schema::Create
   var db      : String = "default"
   var table   : String
   var column  : String
-  var columns : Array(Column) = self.class.parse_columns(column)
+  var columns : Array(Column) = build_columns
   var engine  : String
 
   def to_sql
@@ -21,6 +21,14 @@ class Clickhouse::Schema::Create
 
   def to_s(io : IO)
     io << to_sql
+  end
+
+  private def build_columns
+    if s = column?
+      self.class.parse_columns(s)
+    else
+      Array(Column).new
+    end
   end
 end
 
