@@ -4,10 +4,10 @@ struct Clickhouse::Response::Field
     type: String, # "UInt8"
   })
 
-  def data_type : DataType
-    v = type.sub(/\(\d+\)/, "")
-    DataType.parse?(v) || raise TypeNotSupported.new("column(#{name}) has unsupported type: '#{type}'")
-  end
+#  def data_type : DataType
+#    v = type.sub(/\(\d+\)/, "")
+#    DataType.parse?(v) || raise TypeNotSupported.new("column(#{name}) has unsupported type: '#{type}'")
+#  end
 
   def to_s(io : IO)
     io << "#{name}(#{type})"

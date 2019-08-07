@@ -23,7 +23,7 @@ class Clickhouse::Response::JSONCompactParser
     end
   end
 
-  def scalar : Type
+  def scalar
     each do |row|
       if row.size > 0
         return row.first
@@ -34,8 +34,8 @@ class Clickhouse::Response::JSONCompactParser
     raise DataNotFound.new("data[0]")
   end
 
-  protected def cast(any : JSON::Any, field : Field, hint : String) : Type
-    Cast.cast(any, field.data_type, hint)
+  protected def cast(any : JSON::Any, field : Field, hint : String)
+    Cast.cast(any, field.type, hint)
   end
 end
 

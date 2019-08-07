@@ -24,7 +24,7 @@ res.scalar                # => "foo"
 
 ## Available DataType
 
-- ClickHouse : [src/clickhouse/data_type.cr](./src/clickhouse/data_type.cr) 
+- ClickHouse : [src/clickhouse/cast.cr](./src/clickhouse/cast.cr) 
 
 ## Schema
 

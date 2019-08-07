@@ -26,7 +26,6 @@ describe Clickhouse::Response::JSONCompactParser do
     it "returns an array of Field" do
       parsed.meta.map(&.name).should eq(["1"])
       parsed.meta.map(&.type).should eq(["UInt8"])
-      parsed.meta.map(&.data_type).should eq([Clickhouse::DataType::UInt8])
     end
   end
 
@@ -105,6 +104,31 @@ describe Clickhouse::Response::JSONCompactParser do
     }
     EOF
       parsed.scalar.should eq(1)
+    end
+  end
+
+  context "Array(String)" do
+    it "accepts Array(String)" do
+      parsed = Clickhouse::Response::JSONCompactParser.from_json(<<-EOF)
+    {
+      "meta": [
+        {
+          "name": "vals",
+          "type": "Array(String)"
+        }
+      ],
+      "data": [
+        [["a","b"]]
+      ],
+      "rows": 1,
+      "statistics": {
+        "elapsed": 0.0010013,
+        "rows_read": 0,
+        "bytes_read": 0
+      }
+    }
+    EOF
+      parsed.scalar.should eq(["a", "b"])
     end
   end
 end

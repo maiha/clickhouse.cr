@@ -13,7 +13,13 @@ struct Clickhouse::Response
   var data   : Array(Array(JSON::Any)) = parsed.data
 
   delegate status_code, body, to: http
-  delegate each, scalar, meta, data, rows, statistics, to: parsed
+  delegate scalar, meta, data, rows, statistics, to: parsed
+
+  def each
+    parsed.each do |i|
+      yield i
+    end
+  end
 
   def success? : Response?
     http.success? ? self : nil
