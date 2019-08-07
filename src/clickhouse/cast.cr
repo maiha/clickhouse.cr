@@ -15,6 +15,9 @@ record Clickhouse::Cast, any : JSON::Any do
         {% elsif c == "UInt64" %}
           # ClickHouse returns "COUNT(*)" as String
           (any.as_s? ? any.as_s : any.as_i).to_u64
+        {% elsif c == "Int64" %}
+          # Int64 sometimes converted to String for the case of JSON Format
+          (any.as_s? ? any.as_s : any.as_i).to_i64
         {% else %}
           new(any).cast({{c.id}})
         {% end %}

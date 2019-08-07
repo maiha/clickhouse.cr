@@ -76,10 +76,34 @@ private def count_json : String
 end
 
 describe Clickhouse::Response::JSONCompactParser do
-  parsed = Clickhouse::Response::JSONCompactParser.from_json(count_json)
-
-  context "the case of COUNT(*)" do
+  context "UInt64" do
     it "accepts string as int" do
+      parsed = Clickhouse::Response::JSONCompactParser.from_json(count_json)
+      parsed.scalar.should eq(1)
+    end
+  end
+
+  context "Int64" do
+    it "accepts string as int" do
+      parsed = Clickhouse::Response::JSONCompactParser.from_json(<<-EOF)
+    {
+      "meta": [
+        {
+          "name": "count",
+          "type": "Int64"
+        }
+      ],
+      "data": [
+        ["1"]
+      ],
+      "rows": 1,
+      "statistics": {
+        "elapsed": 0.0010013,
+        "rows_read": 0,
+        "bytes_read": 0
+      }
+    }
+    EOF
       parsed.scalar.should eq(1)
     end
   end
