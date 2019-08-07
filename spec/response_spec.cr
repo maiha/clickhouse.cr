@@ -53,4 +53,24 @@ describe Clickhouse::Response do
       res.scalar.should eq(1)
     end
   end
+
+  describe "#each_hash" do
+    it "iterates all data as hash" do
+      req = Clickhouse::Request.new("SQL")
+      res = Clickhouse::Response.new(URI.new, req, HTTP::Client::Response.new(200), 0.second)
+      
+      res.parsed = Clickhouse::Response::JSONCompactParser.from_json(<<-EOF)
+        {
+          "meta": [{"name": "key", "type": "String"},{"name": "val", "type": "String"}],
+          "data": [["foo","1"],["bar","2"]]
+        }
+        EOF
+
+      got = Array(Array(String)).new
+      res.each_hash do |hash|
+        got << [hash["key"].to_s, hash["val"].to_s]
+      end
+      got.should eq([["foo", "1"], ["bar", "2"]])
+    end
+  end
 end

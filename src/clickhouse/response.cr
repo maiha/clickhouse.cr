@@ -21,6 +21,18 @@ struct Clickhouse::Response
     end
   end
 
+  # TODO: optimize
+  def each_hash
+    keys = meta.map(&.name)
+    each do |ary|
+      hash = Hash(String, Type?).new
+      keys.each_with_index do |k, i|
+        hash[k] = ary[i]?
+      end
+      yield hash
+    end
+  end
+
   def success? : Response?
     http.success? ? self : nil
   end
