@@ -1,0 +1,17 @@
+{
+  "meta": [
+    {
+      "name": "vals",
+      "type": "Array(String)"
+    }
+  ],
+  "data": [
+    [["a","b"]]
+  ],
+  "rows": 1,
+  "statistics": {
+    "elapsed": 0.0010013,
+    "rows_read": 0,
+    "bytes_read": 0
+  }
+}

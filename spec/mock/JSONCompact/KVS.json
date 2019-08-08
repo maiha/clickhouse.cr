@@ -1,0 +1,16 @@
+{
+  "meta": [
+    {
+      "name": "key",
+      "type": "String"
+    },
+    {
+      "name": "val",
+      "type": "String"
+    }
+  ],
+  "data": [
+    ["foo","1"],
+    ["bar","2"]
+  ]
+}

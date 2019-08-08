@@ -1,5 +1,6 @@
 require "spec"
 require "../src/clickhouse"
+require "./mock/**"
 
 SERVICE_TIMEOUT = 10
 CLICKHOUSE_HOST = ENV["CLICKHOUSE_HOST"]? || "localhost"

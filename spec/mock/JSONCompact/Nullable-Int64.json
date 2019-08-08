@@ -1,0 +1,20 @@
+{
+  "meta": [
+    {
+      "name": "count",
+      "type": "Nullable(Int64)"
+    }
+  ],
+  "data": [
+    [
+      null
+    ]
+  ],
+  "rows": 1,
+  "rows_before_limit_at_least": 1,
+  "statistics": {
+    "elapsed": 0.001721501,
+    "rows_read": 11170,
+    "bytes_read": 256706
+  }
+}
