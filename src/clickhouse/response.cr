@@ -15,6 +15,7 @@ struct Clickhouse::Response
   delegate status_code, body, to: http
   delegate scalar, meta, data, rows, statistics, to: parsed
 
+  # define 'each' directly since 'delegate' fails
   def each
     parsed.each do |i|
       yield i

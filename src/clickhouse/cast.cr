@@ -1,9 +1,8 @@
 # Entries are manually maintained by checking official document.
 # https://clickhouse-docs.readthedocs.io/en/latest/data_types/
 
-record Clickhouse::Cast, any : JSON::Any do
-  include Jq::Cast
-  
+module Clickhouse::Cast
+  # Numeric values are sometimes returned as String such as "count(*)"
   {% begin %}
   def self.cast(any : JSON::Any, type : String, hint : String)
     case type
@@ -12,35 +11,41 @@ record Clickhouse::Cast, any : JSON::Any do
         any.as_a.map{|a| cast(a, "{{x}}", hint).as({{x}})}
     {% end %}
     when "Date", "DateTime"
-      new(any).cast(Time)
+      Pretty::Time.parse(cast(any, "String", hint).as(String))
   # Enum
   # FixedString(N)
     when "Float32"
-      (any.as_s? ? any.as_s : any.as_f).to_f32
+      (any.as_s? ? any.as_s : (any.as_i? ? any.as_i : any.as_f)).to_f32
     when "Float64"
-      (any.as_s? ? any.as_s : any.as_f).to_f64
+      (any.as_s? ? any.as_s : (any.as_i? ? any.as_i : any.as_f)).to_f64
     when "UInt8"
-      new(any).cast(UInt8)
+      if any.as_s?
+        case v = any.as_s
+        when "true" ; 1_u8
+        when "false"; 0_u8
+        else        ; v.to_u8
+        end
+      else            
+        any.as_i.to_u8
+      end
     when "UInt16"
-      new(any).cast(UInt16)
+      (any.as_s? ? any.as_s : any.as_i).to_u16
     when "UInt32"
-      new(any).cast(UInt32)
+      (any.as_s? ? any.as_s : any.as_i).to_u32
     when "UInt64"
-      # sometimes returns as String such as "count(*)"
       (any.as_s? ? any.as_s : any.as_i).to_u64
     when "Int8"
-      new(any).cast(Int8)
+      (any.as_s? ? any.as_s : any.as_i).to_i8
     when "Int16"
-      new(any).cast(Int16)
+      (any.as_s? ? any.as_s : any.as_i).to_i16
     when "Int32"
-      new(any).cast(Int32)
+      (any.as_s? ? any.as_s : any.as_i).to_i32
     when "Int64"
-      # sometimes returns as String such as JSON Format
       (any.as_s? ? any.as_s : any.as_i).to_i64
     # Int ranges
   # Uint ranges
     when "String"
-      new(any).cast(String)
+      any.raw.nil? ? "" : any.as_s.to_s
   # Tuple(T1, T2, ...)
   # Nested data structures
   # AggregateFunction(name, types_of_arguments...)
