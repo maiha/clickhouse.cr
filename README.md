@@ -22,9 +22,26 @@ res.statistics.bytes_read # => 1
 res.scalar                # => "foo"
 ```
 
-## Available DataType
+## Supported Data types
 
-- ClickHouse : [src/clickhouse/cast.cr](./src/clickhouse/cast.cr) 
+- [x] Array(T)
+- [x] Nullable(T)
+- [x] Boolean (as UInt8)
+- [x] Date
+- [x] DateTime
+  - [ ] Time zones
+- [ ] Enum
+- [ ] FixedString(N)
+- [x] Float32, Float64
+- [x] UInt8, UInt16, UInt32, UInt64, Int8, Int16, Int32, Int64
+  - [ ] Int ranges
+  - [ ] Uint ranges
+- [x] String
+- [ ] Tuple(T1, T2, ...)
+- [ ] Nested data structures
+- [ ] Special data types
+
+See [src/clickhouse/cast.cr](./src/clickhouse/cast.cr) for more details
 
 ## Schema
 

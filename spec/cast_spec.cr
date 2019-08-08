@@ -37,7 +37,7 @@ describe Clickhouse::Cast do
   cast Float64, "1"  , 1_f64
   cast Float64, "1.1", 1.1_f64
 
-  # bool
+  # Bool
   cast UInt8 , "true" , 1_u8
   cast UInt8 , "false", 0_u8
 
@@ -48,4 +48,29 @@ describe Clickhouse::Cast do
   cast String, "foo", "foo"
   cast String, ""   , ""
   cast String, nil  , ""
+
+  # Array(T)
+  cast Array(Int64), [JSON::Any.new(1_i64),JSON::Any.new(2_i64)], [1_i64,2_i64]
+  cast Array(Int64), [JSON::Any.new("1"),JSON::Any.new("2")]    , [1_i64,2_i64]
+  
+  # Nullable
+  cast Nullable(Int64), 1_i64, 1_i64
+  cast Nullable(Int64), "1"  , 1_i64
+  cast Nullable(Int64), ""   , nil
+  cast Nullable(Int64), nil  , nil
+
+  cast Nullable(Float64), 1_f64, 1_f64
+  cast Nullable(Float64), 1.1  , 1.1_f64
+  cast Nullable(Float64), "1"  , 1_f64
+  cast Nullable(Float64), "1.1", 1.1_f64
+  cast Nullable(Float64), ""   , nil
+  cast Nullable(Float64), nil  , nil
+
+  context "unsupported type" do
+    it "raises CastError" do
+      expect_raises Clickhouse::CastError, /unsupported type: 'FixedString\(2\)'/ do
+        Clickhouse::Cast.cast(JSON::Any.new("foo"), "FixedString(2)", "#{__FILE__}:#{__LINE__}")
+      end
+    end
+  end
 end

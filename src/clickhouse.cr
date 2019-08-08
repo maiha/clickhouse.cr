@@ -8,7 +8,7 @@ require "var"
 require "jq"
 
 class Clickhouse
-  alias Type = Array(Float32) | Array(Float64) | Array(Int16) | Array(Int32) | Array(Int64) | Array(Int8) | Array(String) | Array(Time) | Array(UInt16) | Array(UInt32) | Array(UInt64) | Array(UInt8) | Float32 | Float64 | Int16 | Int32 | Int64 | Int8 | String | Time | UInt8 | UInt16 | UInt32 | UInt64 | Array(Type)
+  alias Type = Array(Float32) | Array(Float64) | Array(Int16) | Array(Int32) | Array(Int64) | Array(Int8) | Array(String) | Array(Time) | Array(UInt16) | Array(UInt32) | Array(UInt64) | Array(UInt8) | Float32 | Float64 | Int16 | Int32 | Int64 | Int8 | String | Time | UInt8 | UInt16 | UInt32 | UInt64 | Nil
   # See also `Clickhouse::Cast`
 end
 

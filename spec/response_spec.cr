@@ -113,5 +113,10 @@ describe Clickhouse::Response do
       res = Clickhouse::Response.mock("Array-String")
       res.scalar.should eq(["a", "b"])
     end
+
+    it "accepts Nullable(Int64)" do
+      res = Clickhouse::Response.mock("Nullable-Int64")
+      res.data.should eq([[nil], [1]])
+    end
   end
 end

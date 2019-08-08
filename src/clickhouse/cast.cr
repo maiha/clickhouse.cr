@@ -9,6 +9,8 @@ module Clickhouse::Cast
     {% for x in [Float32, Float64, Int8, Int16, Int32, Int64, String, Time, UInt8, UInt16, UInt32, UInt64] %}
       when "Array({{x}})"
         any.as_a.map{|a| cast(a, "{{x}}", hint).as({{x}})}
+      when "Nullable({{x}})"
+        (any.raw.nil? || any.raw == "") ? nil : cast(any, "{{x}}", hint).as({{x}})
     {% end %}
     when "Date", "DateTime"
       Pretty::Time.parse(cast(any, "String", hint).as(String))
