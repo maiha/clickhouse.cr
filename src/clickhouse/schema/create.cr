@@ -6,6 +6,13 @@ class Clickhouse::Schema::Create
   var columns : Array(Column) = build_columns
   var engine  : String
 
+  def column(name : String) : Column
+    columns.each do |column|
+      return column if column.name == name
+    end
+    raise "column not found: '#{name}'"
+  end
+
   def to_sql
     String.build do |io|
       io << create << " " << db << "." << table << " (\n"
@@ -52,7 +59,7 @@ class Clickhouse::Schema::Create
     array = Array(Column).new
     buf.split(/,/).each do |line|
       case line
-      when /\A\s*(#{IDENTIFIER})\s+(#{IDENTIFIER})\s*\Z/m
+      when /\A\s*(#{IDENTIFIER})\s+(#{TYPE_IDENTIFIER})\s*\Z/m
         array << Column.new($1, $2.strip)
       else
         raise "can't parse schema column: #{line}"

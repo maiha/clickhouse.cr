@@ -62,3 +62,22 @@ describe Clickhouse::Schema::Create do
     end
   end
 end
+
+######################################################################
+### Examples
+
+describe Clickhouse::Schema::Create do
+  describe "(Examples)" do
+    create = Clickhouse::Schema::Create.mock("examples/campaign.sql")
+    create.table.should eq "campaign"
+    create.column("reasons_not_servable").type.should eq "Array(String)"
+    create.column("frequency_cap").type.should eq "Nullable(Int64)"
+    create.engine.should eq "Log"
+
+    create = Clickhouse::Schema::Create.parse(create.to_sql)
+    create.table.should eq "campaign"
+    create.column("reasons_not_servable").type.should eq "Array(String)"
+    create.column("frequency_cap").type.should eq "Nullable(Int64)"
+    create.engine.should eq "Log"
+  end
+end
