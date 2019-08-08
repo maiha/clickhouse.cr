@@ -68,6 +68,24 @@ table.columns.select(&.type.=~(/DateTime/)).map(&.name)
 # => ["modification_time", "remove_time", "min_time", "max_time"]
 ```
 
+## Create Schema
+
+```crystal
+buf = <<-SQL
+  CREATE TABLE logs (
+    `d` Date,
+    `k` UInt64
+  )
+  ENGINE = MergeTree(d, k, 8192)
+  SQL
+
+create = Clickhouse::Schema::Create.parse(buf)
+create.table            # => "logs"
+create.column("d").type # => "Date"
+create.engine           # => "MergeTree(d, k, 8192)"
+create.to_sql           # should be `buf`
+```
+
 ## QueryTokenizer
 
 This provides general purpose query tokenizer like well-known advanced search.

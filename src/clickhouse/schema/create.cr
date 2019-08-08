@@ -1,10 +1,12 @@
 class Clickhouse::Schema::Create
   var create  : String = "CREATE TABLE"
-  var db      : String = "default"
+  var db      : String
   var table   : String
   var column  : String
   var columns : Array(Column) = build_columns
   var engine  : String
+
+  var backquoted : Bool = false
 
   def column(name : String) : Column
     columns.each do |column|
@@ -14,10 +16,13 @@ class Clickhouse::Schema::Create
   end
 
   def to_sql
+    bq = backquoted ? '`' : ""
     String.build do |io|
-      io << create << " " << db << "." << table << " (\n"
+      io << create << " "
+      io << db << "." if db?
+      io << table << " (\n"
       columns.each_with_index do |column, i|
-        io << "  " << column.name << " " << column.type.to_s
+        io << "  " << bq << column.name << bq << " " << column.type.to_s
         io << "," if i < columns.size - 1
         io.puts
       end
@@ -49,6 +54,8 @@ class Clickhouse::Schema::Create
       schema.table  = $~["table"]
       schema.column = $~["column"].strip
       schema.engine = $~["engine"].strip
+
+      schema.backquoted = schema.column.includes?('`')
     else
       raise "can't parse create schema from: #{buf}"
     end
@@ -59,7 +66,7 @@ class Clickhouse::Schema::Create
     array = Array(Column).new
     buf.split(/,/).each do |line|
       case line
-      when /\A\s*(#{IDENTIFIER})\s+(#{TYPE_IDENTIFIER})\s*\Z/m
+      when /\A\s*`?(#{IDENTIFIER})`?\s+(#{TYPE_IDENTIFIER})\s*\Z/m
         array << Column.new($1, $2.strip)
       else
         raise "can't parse schema column: #{line}"
