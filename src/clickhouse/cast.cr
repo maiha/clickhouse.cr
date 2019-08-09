@@ -12,8 +12,12 @@ module Clickhouse::Cast
       when "Nullable({{x}})"
         (any.raw.nil? || any.raw == "") ? nil : cast(any, "{{x}}", hint).as({{x}})
     {% end %}
-    when "Date", "DateTime"
-      Pretty::Time.parse(cast(any, "String", hint).as(String))
+    when "DateTime"
+      s = cast(any, "String", hint).as(String)
+      Pretty::Time.parse(s, location: ::Time::Location.local)
+    when "Date"
+      s = cast(any, "String", hint).as(String)
+      Pretty::Time.parse(s, location: ::Time::Location.local).at_beginning_of_day
   # Enum
   # FixedString(N)
     when "Float32"

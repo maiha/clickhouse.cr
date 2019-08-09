@@ -1,0 +1,19 @@
+{
+  "meta": [
+    {
+      "name": "mtime",
+      "type": "DateTime"
+    }
+  ],
+  "data": [
+    [
+      "2000-01-02 03:04:05"
+    ]
+  ],
+  "rows": 1,
+  "statistics": {
+    "elapsed": 0.000196678,
+    "rows_read": 14,
+    "bytes_read": 627
+  }
+}

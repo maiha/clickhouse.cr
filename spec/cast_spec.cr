@@ -41,7 +41,7 @@ describe Clickhouse::Cast do
   cast UInt8 , "true" , 1_u8
   cast UInt8 , "false", 0_u8
 
-  cast DateTime, "2000-01-02T03:04:05Z", Pretty.now(2000,1,2,3,4,5)
+  cast DateTime, "2000-01-02T03:04:05Z", Pretty.utc(2000,1,2,3,4,5)
   cast DateTime, "2000-01-02T03:04:05" , Pretty.now(2000,1,2,3,4,5)
   cast Date    , "2000-01-02"          , Pretty.now(2000,1,2)
 

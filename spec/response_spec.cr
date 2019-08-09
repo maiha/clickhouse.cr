@@ -118,5 +118,23 @@ describe Clickhouse::Response do
       res = Clickhouse::Response.mock("Nullable-Int64")
       res.data.should eq([[nil], [1]])
     end
+
+    it "accepts DateTime" do
+      res = Clickhouse::Response.mock("DateTime-via-String")
+      v = res.scalar
+      v.should be_a(Time)
+      t = v.as(Time)
+      t.local?.should eq true
+      t.to_s("%Y-%m-%d %H:%M:%S").should eq "2000-01-02 03:04:05"
+    end
+
+    it "accepts Date" do
+      res = Clickhouse::Response.mock("Date-via-String")
+      v = res.scalar
+      v.should be_a(Time)
+      t = v.as(Time)
+      t.local?.should eq true
+      t.to_s("%Y-%m-%d %H:%M:%S").should eq "2000-01-02 00:00:00"
+    end
   end
 end
