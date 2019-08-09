@@ -1,5 +1,5 @@
 name: clickhouse
-version: 0.4.2
+version: 0.5.0
 
 dependencies:
   var:
@@ -8,10 +8,11 @@ dependencies:
   jq:
     github: maiha/jq.cr
     version: ">= 0.7.0"
+  pretty:
+    github: maiha/pretty.cr
+    version: ">= 0.7.4"
 
 authors:
   - maiha <maiha@wota.jp>
-
-crystal: 0.27.0
 
 license: MIT
