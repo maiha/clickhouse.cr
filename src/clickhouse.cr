@@ -43,5 +43,5 @@ class Clickhouse
   end
 
   include Executable
-  include Schema::Reflection
+  include Reflection
 end

@@ -1,4 +1,4 @@
-module Clickhouse::Schema::Reflection
+module Clickhouse::Reflection
   def databases : Array(Database)
     sql = "SHOW DATABASES"
     names = execute_as_csv(sql).flatten.sort

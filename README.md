@@ -24,21 +24,43 @@ res.to_a    # => [["system", 35], ["test", 9], ...
 
 res.map(String, UInt64).each do |(name, cnt)|
   p [name, cnt]
+
+client.databases # => ["default", "system", ...
 ```
 
 ## API
 
 ```crystal
-Clickhouse.new(host = "localhost", port = 8123, database = nil, ...)
-Clickhouse#execute(sql : String) : Response
+Clickhouse
+  def self.new(host = "localhost", port = 8123, database = nil, ...)
+  def execute(sql : String) : Response
+  # reflection
+  def databases : Array(Database)
+  def database(name : String) : Database
+  def tables(database : String) : Array(Table)
+  def table(database : String, name : String) : Table
 
-Response#each
-Response#each_hash
-Response#map(*types : *T) forall T
-Response#map(**types : **T) forall T
-Response#success? : Response?
-Response#success! : Response
-Response#to_json : String
+Clickhouse::Response
+  def each
+  def each_hash
+  def map(*types : *T) forall T
+  def map(**types : **T) forall T
+  def success? : Response?
+  def success! : Response
+  def to_json : String
+
+Clickhouse::Database
+  def name : String
+  def tables : Array(Table)
+
+Clickhouse::Table
+  def name : String
+  def columns : Array(Column)
+  def count : UInt64
+
+Clickhouse::Column
+  def name : String
+  def type : String
 ```
 
 ## Response
