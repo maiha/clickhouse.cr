@@ -16,6 +16,13 @@ class Clickhouse::Table
     #    return names.map
   end
 
+  def count : UInt64
+    sql = "SELECT count(*) FROM `%s`.`%s`" % [@database.name, @name]
+    req = Request.new(sql, OutputFormat::JSONCompact)
+    res = ctx.execute(req)
+    Response::JSONCompactParser.parse(res.success!.body).scalar.as(UInt64)
+  end
+
   def to_s(io : IO)
     io << @name
   end
