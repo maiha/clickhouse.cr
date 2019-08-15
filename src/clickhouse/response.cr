@@ -34,6 +34,54 @@ struct Clickhouse::Response
     end
   end
 
+  # ```crystal
+  # res = execute <<-SQL
+  #   SELECT   engine, count(*)
+  #   FROM     system.tables
+  #   GROUP BY engine
+  #   SQL
+  # records = res.success!.map(String, UInt64)
+  # records.each do |(name, cnt)|
+  #   p [name, cnt]
+  # ```
+  def map(*types : *T) forall T
+    map{|a|
+    {% begin %}
+      {% i = 0 %}
+      Tuple.new(
+        {% for type in T %}
+          a[{{i}}].as({{type.instance}}),
+          {% i = i + 1 %}
+        {% end %}
+      )
+    {% end %}
+    }
+  end
+
+  # ```crystal
+  # res = execute <<-SQL
+  #   SELECT   engine, count(*)
+  #   FROM     system.tables
+  #   GROUP BY engine
+  #   SQL
+  # records = res.success!.map(name: String, cnt: UInt64)
+  # records.each do |record|
+  #   p [record["name"], record["cnt"]]
+  # ```
+  def map(**types : **T) forall T
+    map{|a|
+    {% begin %}
+      {% i = 0 %}
+      NamedTuple.new(
+      {% for name, type in T %}
+        {{ name }}: a[{{i}}].as({{type.instance}}),
+        {% i = i + 1 %}
+      {% end %}
+      )
+    {% end %}
+    }
+  end
+
   def success? : Response?
     http.success? ? self : nil
   end

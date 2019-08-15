@@ -13,13 +13,66 @@ require "clickhouse"
 
 client = Clickhouse.new(host: "localhost", port: 8123)
 
-res = client.execute("SELECT 'foo', 2")
-res.to_a                  # => [["foo", 2]]
-res.rows                  # => 1
+res = client.execute <<-SQL
+  SELECT   database, count(*)
+  FROM     system.tables
+  GROUP BY database
+  SQL
+
+res.rows    # => 2
+res.to_a    # => [["system", 35], ["test", 9], ...
+
+res.map(String, UInt64).each do |(name, cnt)|
+  p [name, cnt]
+```
+
+## API
+
+```crystal
+Clickhouse.new(host = "localhost", port = 8123, database = nil, ...)
+Clickhouse#execute(sql : String) : Response
+
+Response#each
+Response#each_hash
+Response#map(*types : *T) forall T
+Response#map(**types : **T) forall T
+Response#success? : Response?
+Response#success! : Response
+Response#to_json : String
+```
+
+## Response
+
+### records
+
+```crystal
+res.each do |ary|
+  ary.class        # => Array(Clickhouse::Type)
+  ary[0]           # => "system"
+  ary[1]           # => 35
+
+res.each_hash do |hash|
+  hash.class       # => Hash(String, Clickhouse::Type))
+  hash["database"] # => "system"
+  hash["count(*)"] # => 35
+
+res.map(String, UInt64).each do |(name, cnt)|
+  name.class       # => String
+  name             # => "system"
+  cnt              # => 35
+
+res.map(name: String, cnt: UInt64).each do |r|
+  r.class          # => NamedTuple(name: String, cnt: UInt64)
+  r["name"]        # => "system"
+  r["cnt"]         # => 35
+```
+
+### statistics
+
+```crystal
 res.statistics.elapsed    # => 0.000671276
 res.statistics.rows_read  # => 1
 res.statistics.bytes_read # => 1
-res.scalar                # => "foo"
 ```
 
 ## Supported Data types

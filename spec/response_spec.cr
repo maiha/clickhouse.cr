@@ -73,7 +73,7 @@ describe Clickhouse::Response do
       end
     end
   end
-
+  
   describe "#scalar" do
     it "returns the first value as Type" do
       res = client.execute("SELECT 'foo'")
@@ -86,17 +86,56 @@ describe Clickhouse::Response do
     end
   end
 
-  describe "#each_hash" do
-    it "iterates all data as hash" do
-      got = Array(Array(String)).new
-      res = Clickhouse::Response.mock("KVS")
-      res.each_hash do |hash|
-        got << [hash["key"].to_s, hash["val"].to_s]
+  context "(result sets)" do
+    res = client.execute <<-SQL
+      SELECT   database, count(*)
+      FROM     system.tables
+      GROUP BY database
+      SQL
+
+    describe "#to_a" do
+      it "returns Array(Array(Clickhouse::Type))" do
+        res.to_a.should be_a(Array(Array(Clickhouse::Type)))
       end
-      got.should eq([["foo", "1"], ["bar", "2"]])
+    end
+  
+    describe "#each" do
+      it "iterates as Array(Clickhouse::Type)" do
+        got = nil
+        res.each do |ary|
+          got = ary
+          break
+        end
+        got.should be_a(Array(Clickhouse::Type))
+      end
+    end
+  
+    describe "#each_hash" do
+      it "iterates as Hash(String, Clickhouse::Type)" do
+        got = nil
+        res.each_hash do |hash|
+          got = hash
+          break
+        end
+        got.should be_a(Hash(String, Clickhouse::Type))
+      end
+    end
+
+    describe "map(Tuple)" do
+      it "returns Array(Tuple(String, UInt64))" do
+        ary = res.success!.map(String, UInt64)
+        ary.should be_a(Array(Tuple(String, UInt64)))
+      end
+    end
+
+    describe "map(NamedTuple)" do
+      it "returns Array(NamedTuple(name: String, cnt: UInt64))" do
+        ary = res.success!.map(name: String, cnt: UInt64)
+        ary.should be_a(Array(NamedTuple(name: String, cnt: UInt64)))
+      end
     end
   end
-
+  
   context "(TYPES)" do
     # `count(*)` returns a string like `[["1"]]` although it has "UInt64" type.
     it "accepts String as UInt64" do
