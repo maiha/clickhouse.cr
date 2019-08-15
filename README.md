@@ -182,7 +182,7 @@ puts tokens.map(&.to_s)
 dependencies:
   var:
     github: maiha/clickhouse.cr
-    version: 0.5.0
+    version: 0.5.1
 ```
 2. Run `shards install`
 
