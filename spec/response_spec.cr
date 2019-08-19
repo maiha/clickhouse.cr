@@ -121,6 +121,13 @@ describe Clickhouse::Response do
       end
     end
 
+    describe "#records" do
+      it "returns Array(Record)" do
+        res.records.should be_a(Array(Clickhouse::Record))
+        res.records.size.should eq res.rows
+      end
+    end
+
     describe "map(Tuple)" do
       it "returns Array(Tuple(String, UInt64))" do
         ary = res.success!.map(String, UInt64)

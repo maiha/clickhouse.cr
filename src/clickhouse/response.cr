@@ -40,6 +40,24 @@ struct Clickhouse::Response
   #   FROM     system.tables
   #   GROUP BY engine
   #   SQL
+  # records = res.success!.records
+  # records.each do |hash|
+  #   p hash["engine"]
+  # ```
+  def records : Array(Record)
+    ary = Array(Record).new
+    each_hash do |hash|
+      ary << hash
+    end
+    return ary
+  end
+
+  # ```crystal
+  # res = execute <<-SQL
+  #   SELECT   engine, count(*)
+  #   FROM     system.tables
+  #   GROUP BY engine
+  #   SQL
   # records = res.success!.map(String, UInt64)
   # records.each do |(name, cnt)|
   #   p [name, cnt]

@@ -43,6 +43,7 @@ Clickhouse
 Clickhouse::Response
   def each
   def each_hash
+  def records : Array(Record)
   def map(*types : *T) forall T
   def map(**types : **T) forall T
   def success? : Response?
@@ -74,6 +75,11 @@ res.each do |ary|
   ary[1]           # => 35
 
 res.each_hash do |hash|
+  hash.class       # => Hash(String, Clickhouse::Type))
+  hash["database"] # => "system"
+  hash["count(*)"] # => 35
+
+res.records.each do |hash|
   hash.class       # => Hash(String, Clickhouse::Type))
   hash["database"] # => "system"
   hash["count(*)"] # => 35
