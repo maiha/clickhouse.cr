@@ -66,6 +66,15 @@ describe Clickhouse::Cast do
   cast Nullable(Float64), ""   , nil
   cast Nullable(Float64), nil  , nil
 
+  cast Nullable(DateTime), "" , nil
+  cast Nullable(DateTime), nil, nil
+  cast Nullable(DateTime), "2000-01-02T03:04:05Z", Pretty.utc(2000,1,2,3,4,5)
+  cast Nullable(DateTime), "2000-01-02T03:04:05" , Pretty.now(2000,1,2,3,4,5)
+
+  cast Nullable(Date), "" , nil
+  cast Nullable(Date), nil, nil
+  cast Nullable(Date), "2000-01-02", Pretty.now(2000,1,2)
+  
   context "unsupported type" do
     it "raises CastError" do
       expect_raises Clickhouse::CastError, /unsupported type: 'FixedString\(2\)'/ do

@@ -12,6 +12,12 @@ module Clickhouse::Cast
       when "Nullable({{x}})"
         (any.raw.nil? || any.raw == "") ? nil : cast(any, "{{x}}", hint).as({{x}})
     {% end %}
+    when /\ANullable\((.*?)\)\Z/
+      if any.raw.nil? || any.raw == ""
+        nil
+      else
+        cast(any, $1, hint)
+      end
     when "DateTime"
       s = cast(any, "String", hint).as(String)
       Pretty::Time.parse(s, location: ::Time::Location.local)
