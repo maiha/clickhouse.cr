@@ -2,7 +2,7 @@
 
 ClickHouse client for [Crystal](http://crystal-lang.org/).
 
-- crystal: 0.30.0
+- crystal: 0.31.1
 
 ## Usage
 
@@ -188,7 +188,7 @@ puts tokens.map(&.to_s)
 dependencies:
   var:
     github: maiha/clickhouse.cr
-    version: 0.5.2
+    version: 0.5.3
 ```
 2. Run `shards install`
 
