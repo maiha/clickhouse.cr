@@ -128,17 +128,29 @@ describe Clickhouse::Response do
       end
     end
 
-    describe "map(Tuple)" do
+    describe "#map(Tuple)" do
       it "returns Array(Tuple(String, UInt64))" do
         ary = res.success!.map(String, UInt64)
         ary.should be_a(Array(Tuple(String, UInt64)))
       end
+
+      it "raises CastError when type is not match #1" do
+        expect_raises(Clickhouse::CastError, "Clickhouse::Response#map expects String, but got Nil (row=1, col=2)") do
+          Clickhouse::Response.mock("Nullable-String").map(Int64, String)
+        end
+      end
     end
 
-    describe "map(NamedTuple)" do
+    describe "#map(NamedTuple)" do
       it "returns Array(NamedTuple(name: String, cnt: UInt64))" do
         ary = res.success!.map(name: String, cnt: UInt64)
         ary.should be_a(Array(NamedTuple(name: String, cnt: UInt64)))
+      end
+
+      it "raises CastError when type is not match #1" do
+        expect_raises(Clickhouse::CastError, "Clickhouse::Response#map expects String, but got Nil (row=1, col=2)") do
+          Clickhouse::Response.mock("Nullable-String").map(id: Int64, v: String)
+        end
       end
     end
   end

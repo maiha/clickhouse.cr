@@ -1,0 +1,28 @@
+{
+  "meta": [
+    {
+      "name": "id",
+      "type": "Int64"
+    },
+    {
+      "name": "v",
+      "type": "Nullable(String)"
+    }
+  ],
+  "data": [
+    [
+      "2",
+      null
+    ],
+    [
+      "1",
+      "foo"
+    ]
+  ],
+  "rows": 2,
+  "statistics": {
+    "elapsed": 0.000983632,
+    "rows_read": 2,
+    "bytes_read": 39
+  }
+}
