@@ -31,7 +31,8 @@ class Clickhouse
       names.each do |name|
         name = name.strip
         next if name.empty?
-        contains("concat(%s)" % name_fields.join(","), name, not: not)
+        field = (name_fields.size == 1) ? name_fields.first : ("concat(%s)" % name_fields.join(","))
+        contains(field, name, not: not)
       end
     end
 
