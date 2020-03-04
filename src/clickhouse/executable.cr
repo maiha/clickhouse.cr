@@ -29,9 +29,9 @@ module Clickhouse::Executable
     logger.debug "HTTP request: #{http_req.path}"
     logger.debug "HTTP headers: #{http_req.headers.to_h}"
 
-    started_at = Time.now
+    started_at = Pretty.now
     http_res   = http_client.exec(http_req)
-    stopped_at = Time.now
+    stopped_at = Pretty.now
 
     Response.new(uri: uri, req: req, http: http_res, time: (stopped_at - started_at))
 
@@ -51,7 +51,7 @@ module Clickhouse::Executable
     buf = String.build do |s|
       {% for x in %w( user password database profile ) %}
         if {{x.id}}?
-          s << "&{{x.id}}=" << URI.escape({{x.id}})
+          s << "&{{x.id}}=" << Pretty::URI.escape({{x.id}})
         end
       {% end %}
       s << "&query="
