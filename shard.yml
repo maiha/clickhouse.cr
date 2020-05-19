@@ -4,13 +4,10 @@ version: 0.5.5
 dependencies:
   var:
     github: maiha/var.cr
-    version: ">= 1.2.0"
   jq:
     github: maiha/jq.cr
-    version: ">= 0.7.0"
   pretty:
     github: maiha/pretty.cr
-    version: ">= 0.9.3"
 
 authors:
   - maiha <maiha@wota.jp>

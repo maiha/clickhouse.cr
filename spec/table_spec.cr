@@ -9,4 +9,11 @@ describe Clickhouse::Table do
       table.count.should be_a(UInt64)
     end
   end
+
+  describe "#inspect" do
+    it "works" do
+      table = client.table("system", "parts")
+      table.inspect.should be_a(String)
+    end
+  end
 end

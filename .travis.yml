@@ -4,4 +4,4 @@ addons:
       - docker-ce
 
 script:
-  make test
+  make ci

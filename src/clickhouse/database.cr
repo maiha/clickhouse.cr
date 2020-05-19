@@ -16,6 +16,10 @@ class Clickhouse::Database
     @ctx || raise "no active connections"
   end
 
+  def ctx?
+    @ctx
+  end
+
   def to_s(io : IO)
     io << @name
   end

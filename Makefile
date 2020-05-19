@@ -4,9 +4,9 @@ VERSION=
 CURRENT_VERSION=$(shell git tag -l | sort -V | tail -1)
 GUESSED_VERSION=$(shell git tag -l | sort -V | tail -1 | awk 'BEGIN { FS="." } { $$3++; } { printf "%d.%d.%d", $$1, $$2, $$3 }')
 
-.PHONY : spec test
+.PHONY: spec ci
 
-test: clean spec check_version_mismatch
+ci: clean spec check_version_mismatch
 
 clean:
 	docker-compose down -v

@@ -2,7 +2,7 @@ require "./column"
 
 class Clickhouse::Table
   getter name
-  delegate ctx, to: @database
+  delegate ctx, ctx?, to: @database
 
   def initialize(@database : Database, @name : String)
   end
@@ -27,6 +27,6 @@ class Clickhouse::Table
   end
 
   def inspect(io : IO)
-    io << "Table(%s, %s)" % [@name.inspect, @ctx ? "active" : "lost"]
+    io << "Table(%s, %s)" % [@name.inspect, ctx? ? "active" : "lost"]
   end
 end
