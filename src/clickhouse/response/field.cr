@@ -9,6 +9,10 @@ struct Clickhouse::Response::Field
 #    DataType.parse?(v) || raise TypeNotSupported.new("column(#{name}) has unsupported type: '#{type}'")
 #  end
 
+  def column : Column
+    Column.new(name: name, type: type)
+  end
+  
   def to_s(io : IO)
     io << "#{name}(#{type})"
   end
