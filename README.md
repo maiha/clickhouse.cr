@@ -167,6 +167,20 @@ create.engine           # => "MergeTree(d, k, 8192)"
 create.to_sql           # should be `buf`
 ```
 
+## Migrate Plans
+
+```crystal
+migrate = Migrate.new(columns1, columns2)
+migrate.plans.size  # => 4
+migrate.map(&.name) # => ["id", "age", "hobby"]
+
+puts migrate.manifest
+# 1  id     MODIFY COLUMN `id` Int64
+# 2  name   # NOP
+# 3  age    DROP COLUMN `age`
+# 4  hobby  ADD COLUMN `hobby` String
+```
+
 ## QueryTokenizer
 
 This provides general purpose query tokenizer like well-known advanced search.
