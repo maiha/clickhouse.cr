@@ -2,8 +2,8 @@ version: '2'
 
 services:
   spec:
-    image: crystallang/crystal:0.33.0
-    command: bash -c "shards update; crystal spec -v"
+    image: crystallang/crystal:$CRYSTAL_VERSION
+    command: crystal spec -v --exclude-warnings lib
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - .:/v

@@ -19,7 +19,8 @@ module Clickhouse::Executable
     res = execute(req)
     CSV.parse(res.success!.body)
   end
-  
+
+{% begin %}
   def execute(req : Request) : Response
     http_req = HTTP::Request.new("POST", build_query_param, build_headers, body: req.sql)
     http_client = build_http
@@ -35,9 +36,16 @@ module Clickhouse::Executable
 
     Response.new(uri: uri, req: req, http: http_res, time: (stopped_at - started_at))
 
+{% if compare_versions(Crystal::VERSION, "0.34.0") >= 0 %}
+  rescue ex : IO::Error
+
+{% else %}
   rescue ex : Errno
+{% end %}
+
     raise Clickhouse::CannotConnectError.new("#{ex.class}: #{ex.message}").tap(&.uri= uri)
   end
+{% end %}
 
   private def build_http
     http = HTTP::Client.new(uri)

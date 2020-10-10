@@ -6,7 +6,10 @@ GUESSED_VERSION=$(shell git tag -l | sort -V | tail -1 | awk 'BEGIN { FS="." } {
 
 .PHONY: spec ci
 
-ci: clean spec check_version_mismatch
+ci: clean shards spec check_version_mismatch
+
+shards:
+	docker-compose run spec shards update
 
 clean:
 	docker-compose down -v
