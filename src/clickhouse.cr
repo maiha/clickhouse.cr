@@ -1,7 +1,7 @@
 # stdlib
 require "csv"
 require "http"
-require "logger"
+require "log"
 
 # shard
 require "var"
@@ -24,7 +24,7 @@ class Clickhouse
   var user            : String  = "default"
   var password        : String
   var profile         : String
-  var logger          : Logger  = Logger.new(nil)
+  var logger          : Log  = ::Log.for("clickhouse")
   var dns_timeout     : Float64 = 3.0
   var connect_timeout : Float64 = 5.0
   var read_timeout    : Float64 = 60.0

@@ -2,7 +2,7 @@
 
 ClickHouse client for [Crystal](http://crystal-lang.org/).
 
-- crystal: 0.27.2 0.33.0 0.34.0 0.35.1
+- crystal: 0.34.0 0.35.1 0.36.1
 
 ## Usage
 

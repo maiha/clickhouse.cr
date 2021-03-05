@@ -27,8 +27,8 @@ module Clickhouse::Executable
 
     @before_execute.try &.each &.call(http_client, http_req)
     
-    logger.debug "HTTP request: #{http_req.path}"
-    logger.debug "HTTP headers: #{http_req.headers.to_h}"
+    logger.debug { "HTTP request: #{http_req.path}" }
+    logger.debug { "HTTP headers: #{http_req.headers.to_h}" }
 
     started_at = Pretty.now
     http_res   = http_client.exec(http_req)
