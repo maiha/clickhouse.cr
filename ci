@@ -2,19 +2,8 @@
 
 set -eu
 
-function test {
-  local ver=$1; shift
-  local cmd="docker-compose run spec crystal spec -v $@"
-
-  echo "----------------------------------------------------------------------"
-  echo "[$ver] $cmd"
-  echo "----------------------------------------------------------------------"
-  sed -i -e "s/^CRYSTAL_VERSION=.*/CRYSTAL_VERSION=$ver/" .env
-  $cmd
-}
-
-#test 0.27.2
-#test 0.33.0
-test 0.34.0
-test 0.35.1
-test 0.36.1
+make test/0.34.0
+make test/0.35.1
+make test/0.36.1
+make test/1.0.0
+make test/1.1.1

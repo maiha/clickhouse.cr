@@ -1,8 +1,8 @@
-# clickhouse.cr [![Build Status](https://travis-ci.org/maiha/clickhouse.cr.svg?branch=master)](https://travis-ci.org/maiha/clickhouse.cr)
+# clickhouse.cr
 
 ClickHouse client for [Crystal](http://crystal-lang.org/).
 
-- crystal: 0.34.0 0.35.1 0.36.1
+* **tested crystal versions** : See [ci](./ci)
 
 ## Usage
 
