@@ -20,7 +20,10 @@ describe Clickhouse do
         date Date,
         value Array(UInt32)
       )
-      ENGINE = MergeTree(date, date, 8192)
+      ENGINE = MergeTree
+      PARTITION BY date
+      ORDER BY date
+      SETTINGS index_granularity = 8192 
       EOF
   end
   

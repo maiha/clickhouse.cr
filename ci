@@ -3,7 +3,5 @@
 set -eu
 
 make test/0.34.0
-make test/0.35.1
 make test/0.36.1
-make test/1.0.0
-make test/1.1.1
+make test/1.6.2

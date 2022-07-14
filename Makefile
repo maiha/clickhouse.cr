@@ -5,28 +5,32 @@ SHELL=/bin/bash
 ci: clean shards spec check_version_mismatch
 
 shards:
-	docker-compose run spec shards update
+	docker compose run spec shards update
 
 clean:
-	docker-compose down -v
+	docker compose down -v
+	rm -f shard.lock
 
 spec:
-	docker-compose run spec
+	docker compose run spec crystal spec $(VERBOSE) $(CFLAGS) $(TARGET)
 
 .PHONY : check_version_mismatch
 check_version_mismatch: shard.yml README.md
 	diff -w -c <(grep version: README.md) <(grep ^version: shard.yml)
 
-test/%: shard.lock
+test/%:
+	@make clean
 	@echo "----------------------------------------------------------------------"
 	@echo "[$*] TARGET=$(TARGET) CFLAGS=$(CFLAGS)"
 	@echo "----------------------------------------------------------------------"
 	@sed -i -e "s/^CRYSTAL_VERSION=.*/CRYSTAL_VERSION=$*/" .env
-	@docker-compose run spec crystal spec $(VERBOSE) $(CFLAGS) $(TARGET)
+	@docker compose build
+	@docker compose run spec shards update
+	@docker compose run spec crystal spec $(VERBOSE) $(CFLAGS) $(TARGET)
 
 VERSION=
 CURRENT_VERSION=$(shell git tag -l | sort -V | tail -1 | sed -e 's/^v//')
-GUESSED_VERSION=$(shell git tag -l | sort -V | tail -1 | awk 'BEGIN { FS="." } { $$3++; } { printf "%d.%d.%d", $$1, $$2, $$3 }')
+GUESSED_VERSION=$(shell git tag -l | sort -V | tail -1 | sed -e 's/^v//' | awk 'BEGIN { FS="." } { $$3++; } { printf "%d.%d.%d", $$1, $$2, $$3 }')
 
 .PHONY : version
 version: README.md
